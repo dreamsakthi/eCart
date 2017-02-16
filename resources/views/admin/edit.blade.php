@@ -7,6 +7,11 @@
 @endsection
  
 @section('content')
+@if ($errors->has())
+        @foreach ($errors->all() as $error)
+            <div class='bg-danger alert'>{!! $error !!}</div>
+        @endforeach
+        @endif
     <div class="panel panel-info">
         <div class="panel-heading">
             <div class="panel-title">Edit Product</div>

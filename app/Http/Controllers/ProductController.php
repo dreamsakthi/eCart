@@ -11,6 +11,9 @@ use Request;
  
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
  
 class ProductController extends Controller
 {
@@ -52,24 +55,49 @@ class ProductController extends Controller
 
     public function update($id, Request $request)
     {
-        $product = Product::findOrFail($id);
-        $product->name =Request::input('name');
-        $product->description =Request::input('description');
-        $product->price =Request::input('price');
-        $product->imageurl =Request::input('imageurl');
-        $product->save();
-        return redirect('/admin/products');
+        $rules = array(
+        'name'             => 'required',                        
+        'description'      => 'required',     
+        'price'         => 'required',
+        'imageurl' => 'required'           
+        );
+
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return Redirect::to('admin/product/edit/'.$id)->withErrors($validator);
+        } else {
+            $product = Product::findOrFail($id);
+            $product->name =Request::input('name');
+            $product->description =Request::input('description');
+            $product->price =Request::input('price');
+            $product->imageurl =Request::input('imageurl');
+            $product->save();
+            return redirect('/admin/products');
+        }
     }
  
     public function add() {
- 
-        $product  = new Product();
-        $product->name =Request::input('name');
-        $product->description =Request::input('description');
-        $product->price =Request::input('price');
-        $product->imageurl =Request::input('imageurl');
-        $product->save();
-        return redirect('/admin/products');
+        $rules = array(
+        'name'             => 'required',                        
+        'description'      => 'required',     
+        'price'         => 'required',
+        'imageurl' => 'required'           
+        );
+
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return Redirect::to('admin/product/new')->withErrors($validator);
+        } else {
+            $product  = new Product();
+            $product->name =Request::input('name');
+            $product->description =Request::input('description');
+            $product->price =Request::input('price');
+            $product->imageurl =Request::input('imageurl');
+            $product->save();
+            return redirect('/admin/products');
+        }
  
     }
 }
