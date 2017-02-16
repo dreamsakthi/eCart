@@ -16,3 +16,8 @@ Default Normal User
 
 * Email: sakthi@example.com
 * Password: sakthi
+
+Rest Controller to Access the Users/Products
+* http://localhost:8000/api/products
+* http://localhost:8000/api/users
+
